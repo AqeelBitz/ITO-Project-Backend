@@ -12,7 +12,7 @@ import org.acme.services.LovTableService;
 import java.sql.SQLException;
 import java.util.List;
 
-@Path("lov")
+@Path("api/data-access/lov")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class LovController {

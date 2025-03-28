@@ -8,7 +8,7 @@ import org.acme.respository.UserRepository;
 import java.sql.SQLException;
 import java.util.*;
 
-@Path("/user")
+@Path("api/data-access/user")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class UserController {
@@ -16,7 +16,6 @@ public class UserController {
 
     public UserController() {
     }
-
 
     @Inject
     UserRepository userRepository;

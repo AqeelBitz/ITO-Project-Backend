@@ -2,7 +2,7 @@ package org.acme.models;
 import java.util.*;
 
 public class ConsignDatails {
-    public int consignment_id;
+    public Integer consignment_id;
     public String courier;
     public Date booking_date;
     public String account_no;
@@ -27,11 +27,11 @@ public class ConsignDatails {
     public String receiver_cnic;
     public String card_status;
 
-    public int getConsignment_id() {
+    public Integer getConsignment_id() {
         return consignment_id;
     }
 
-    public void setConsignment_id(int consignment_id) {
+    public void setConsignment_id(Integer consignment_id) {
         this.consignment_id = consignment_id;
     }
 
