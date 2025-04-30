@@ -16,13 +16,13 @@ public class TokenService {
 
     public final static Logger LOGGER = Logger.getLogger(TokenService.class.getSimpleName());
 
-    public String generateUserToken(String email, String username) {
-        return generateToken(email, username, Roles.UPDATER);
-    }
+    // public String generateUserToken(String email, String username) {
+    //     return generateToken(email, username, Roles.UPDATER);
+    // }
 
-    public String generateServiceToken(String serviceId, String serviceName) {
-        return generateToken(serviceId,serviceName,Roles.VIEWER);
-    }
+    // public String generateServiceToken(String serviceId, String serviceName) {
+    //     return generateToken(serviceId,serviceName,Roles.VIEWER);
+    // }
 
     public String generateToken(String subject, String name, String... roles) {
         try {

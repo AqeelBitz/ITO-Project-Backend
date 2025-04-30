@@ -2,10 +2,11 @@ package services;
 
 import org.mindrot.jbcrypt.BCrypt;
 import database.Datasources;
+import dto.UserLoginResponseDTO;
 
 import java.sql.*;
 import jakarta.enterprise.context.RequestScoped;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import javax.sql.DataSource;
 import jakarta.transaction.Transactional;
 
@@ -23,7 +24,7 @@ public class UserDao{
     public void registerUser(String username, String password, String email, int roleId, int branchId) throws SQLException {
         String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
 
-        String sql = "INSERT INTO User (USERNAME, PASSWORD_HASH, EMAIL, ROLE_ID, BRANCH_CODE) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Users (USERNAME, PASSWORD, USEREMAIL, ROLE_ID, BRANCH_CD) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -40,24 +41,39 @@ public class UserDao{
 
 
     @Transactional
-    public String loginUser(String username, String password, String branchCode) throws SQLException {
-        String sql = "SELECT USER_ID,EMAIL, PASSWORD_HASH FROM User WHERE USERNAME = ? and BRANCH_CODE=?";
+    public UserLoginResponseDTO loginUser(String username, String password, String branchCode) throws SQLException {
+        String sql = "SELECT u.USER_ID,u.BRANCH_CD,u.USERNAME, u.ROLE_ID, r.ROLE_TYPE ,u.UserEMAIL, u.PASSWORD  FROM Users u JOIN ROLE r on u.ROLE_ID=r.ROLE_ID WHERE USERNAME = ? and BRANCH_CD=? ";
 
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, username);
-            statement.setString(2, branchCode);
+            int branchCodeInt = Integer.parseInt(branchCode);
+            statement.setInt(2, branchCodeInt); 
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
                 int userId = resultSet.getInt("USER_ID");
-                String hashedPassword = resultSet.getString("PASSWORD_HASH");
-                String email = resultSet.getString("EMAIL");
+                int branchCodeQuery = resultSet.getInt("BRANCH_CD");
+                String userNameQuery = resultSet.getString("USERNAME");
+                String roleId = resultSet.getString("ROLE_ID");
+                String roleName = resultSet.getString("ROLE_TYPE");
+                String email = resultSet.getString("UserEMAIL");
+                String hashedPassword = resultSet.getString("PASSWORD");
+
 
 
                 if (BCrypt.checkpw(password, hashedPassword)) {
-                    return tokenService.generateUserToken(email,username);
+                     UserLoginResponseDTO userLoginResponseDTO=new  UserLoginResponseDTO();
+                             userLoginResponseDTO.setUserId(userId);
+                             userLoginResponseDTO.setUserName(username);
+                             userLoginResponseDTO.setBranchCode(branchCodeQuery);
+                             userLoginResponseDTO.setRoleName(roleName);
+                             userLoginResponseDTO.setRoleId(roleId);
+
+                             userLoginResponseDTO.setToken(tokenService.generateToken(userNameQuery,email,roleName));
+
+                    return userLoginResponseDTO;
                 } else {
                     return null; // Incorrect password
                 }

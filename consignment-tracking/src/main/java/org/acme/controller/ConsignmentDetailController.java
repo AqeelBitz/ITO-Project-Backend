@@ -5,7 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.sql.DataSource;
+
+import java.sql.Connection;
 import org.acme.exceptions.ConsignDatailsException;
+import org.acme.exceptions.LogginFileDetailsException;
 
 // import java.sql.SQLException;
 
@@ -32,30 +36,76 @@ public class ConsignmentDetailController {
     ConsignmentDetailService consignmentDetailService;
     @Inject
     ConsignmentDetailRepository consignmentDetailsRepository; 
+
+    @Inject 
+    DataSource dataSource;
     @POST
-    @Path("/add")
-    public Response AddConsginmentDetails(ConsignDatails consignDatails) throws SQLException {
-        try{
-            ConsignDatails addeDatails = consignmentDetailService.AddConsginmentDetails(consignDatails);
-            
-            Integer file_id = 1;
-            // Call the incrementAcceptedCount method.
-            consignmentDetailsRepository.incrementAcceptedCount(file_id);
-            return Response.status(Response.Status.CREATED).entity(addeDatails).build();
-        }
-        catch(ConsignDatailsException e){
-            System.err.println("Error Adding Consignment Details: "+ e.getMessage());
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to add Consignment Details: "+e.getMessage()).build();
+    @Path("/accept")
+    public Response AddConsginmentDetails(@QueryParam("fileName") String file_name, 
+                                          @QueryParam("userId") int user_id, 
+                                          @QueryParam("recordCount") int record_count,
+                                          @QueryParam("accept_record_count") int accept_record_count,
+                                          @QueryParam("reject_record_count") int reject_record_count,
+                                          @QueryParam("rejectedRows") String rejectedRows,
+                                          @QueryParam("acceptedRows") String acceptedRows,
+                                          @QueryParam("uploadedBy") String uploadedBy,
+                                          @QueryParam("fileType") String fileType,
+                                          List<ConsignDatails> consignDatails) {
+        Connection connection = null;
+        System.out.println("consignDatails: "+consignDatails);
+        try {
+            connection = dataSource.getConnection();
+            connection.setAutoCommit(false); // Start transaction
+
+            // Insert into consignment details
+            List<ConsignDatails> addedDetails = consignmentDetailService.AddConsginmentDetails(consignDatails, connection);
+
+            // Update logging file details
+            consignmentDetailsRepository.incrementAcceptedCount(file_name, user_id,record_count,accept_record_count, reject_record_count,rejectedRows, acceptedRows, uploadedBy,fileType, connection);
+
+            connection.commit(); // Commit transaction
+            return Response.status(Response.Status.CREATED).entity(addedDetails).build();
+        } catch (SQLException | ConsignDatailsException e) {
+            System.out.println("---> "+e.getStackTrace().toString());
+            if (connection != null) {
+                try {
+                    connection.rollback(); // Rollback if any operation fails
+                } catch (SQLException rollbackEx) {
+                    System.err.println("Transaction rollback failed: " + rollbackEx.getMessage());
+                }
+            }
+            System.err.println("Error Adding Consignment Details: " + e.getMessage());
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                           .entity(Map.of("error","Failed to add Consignment Details. ", "message", e.getMessage())).build();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.setAutoCommit(true); // Reset auto-commit
+                    connection.close(); // Close connection
+                } catch (SQLException closeEx) {
+                    System.err.println("Error closing connection: " + closeEx.getMessage());
+                }
+            }
         }
     }
-
-        @GET //Use get because we are retrieving data from the url.
+    
+    @POST
+    @Path("/reject")
+    public Response addRejectedCount(@QueryParam("fileName") String fileName, @QueryParam("userId") int userId, @QueryParam("recordCount") int record_count) throws LogginFileDetailsException {
+        try {
+            consignmentDetailsRepository.incrementRejectedCount(fileName, userId, record_count);
+            return Response.status(Response.Status.CREATED).build();
+        } catch (LogginFileDetailsException e) {
+            // System.err.println("Error Adding Rejected Count: " + e.getMessage());
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+        @GET 
         @Path("/search")
     public Response searchConsignmentDetails(
             @QueryParam("consignment_id") String consignmentId,
             @QueryParam("address") String address,
             @QueryParam("city") String city,
-            // Add other query parameters as needed
             @QueryParam("account_no") String accountNo,
             @QueryParam("receiver_cnic") String receiver_cnic
             ) {
@@ -80,14 +130,12 @@ public class ConsignmentDetailController {
         }
         try {
             List<ConsignDatails> results = consignmentDetailService.searchConsignmentDetails(searchCriteria);
+        
+
             return Response.ok(results).build();
         } catch (ConsignDatailsException e) {
-            // Log the error
-            System.err.println("Error searching consignment details: " + e.getMessage());
 
-            // Create an error response
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Failed to search consignment details: " + e.getMessage())
                     .build();
         }
     }

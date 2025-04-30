@@ -1,0 +1,51 @@
+package client;
+
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response; // Import Response
+
+import java.util.List;
+
+import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
+import entities.ConsignDetailsDTO;
+
+// @RegisterRestClient(baseUri = "http://localhost:8081/api/data-access/consignment-details")
+@RegisterRestClient
+@Path("/api/data-access")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
+public interface ConsignmentClient {
+
+    @POST
+    @Path("/consignment-details/accept")
+    Response acceptConsignment( // Change to Response
+        @QueryParam("fileName") String fileName,
+        @QueryParam("userId") int userId,
+        @QueryParam("recordCount") int recordCount,
+        @QueryParam("accept_record_count") int accept_record_count,
+        @QueryParam("reject_record_count") int reject_record_count,
+        @QueryParam("rejectedRows") String rejectedRows,
+        @QueryParam("acceptedRows") String acceptedRows,
+        @QueryParam("uploadedBy") String uploadedBy,
+        @QueryParam("fileType") String fileType,
+        List<ConsignDetailsDTO>  consignDetails
+    );
+
+    @POST
+    @Path("/consignment-details/reject")
+    Response addRejectedCount(@QueryParam("fileName") String fileName, @QueryParam("userId") int userId, @QueryParam("recordCount") int recordCount);
+
+    @GET
+    @Path("/consignment-details/search")
+    Response searchConsignmentDetails(
+            @QueryParam("consignment_id") String consignmentId,
+            @QueryParam("address") String address,
+            @QueryParam("city") String city,
+            @QueryParam("account_no") String accountNo,
+            @QueryParam("receiver_cnic") String receiver_cnic
+    );
+
+    @GET
+    @Path("/lov")
+    Response getLOVs();
+}

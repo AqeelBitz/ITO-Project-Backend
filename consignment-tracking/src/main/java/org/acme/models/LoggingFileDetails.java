@@ -1,7 +1,9 @@
 package org.acme.models;
 
-import java.sql.Time;
+import java.time.LocalTime;
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class LoggingFileDetails {
     public Integer file_id;
@@ -10,8 +12,10 @@ public class LoggingFileDetails {
     public Integer accept_record_count;
     public Integer reject_record_count;
     public Integer user_id;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     public Date file_date;
-    public Time file_time;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
+    public LocalTime file_time;
 
     public Integer getFile_id() {
         return file_id;
@@ -61,11 +65,11 @@ public class LoggingFileDetails {
         this.file_date = date;
     }
 
-    public Time getFileTime() {
+    public LocalTime getFileTime() {
         return file_time;
     }
 
-    public void setFileTime(Time file_time) {
+    public void setFileTime(LocalTime file_time) {
         this.file_time = file_time;
     }
     public Integer getUser_id() {

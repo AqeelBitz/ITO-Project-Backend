@@ -1,5 +1,6 @@
 package org.acme.services;
 
+import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
 
@@ -17,8 +18,10 @@ public class ConsignmentDetailService {
 
     @Inject
     ConsignmentDetailRepository consignmentDetailRepository;
-    public ConsignDatails AddConsginmentDetails(ConsignDatails consignDatails) throws  ConsignDatailsException{
-        return consignmentDetailRepository.addConsignmentDetails(consignDatails);
+    
+    public List<ConsignDatails> AddConsginmentDetails(List<ConsignDatails> consignDatails, Connection connection) throws  ConsignDatailsException{
+        
+        return consignmentDetailRepository.addConsignmentDetails(consignDatails, connection);
     }
 
         public List<ConsignDatails> searchConsignmentDetails(Map<String, String> searchCriteria) throws ConsignDatailsException {

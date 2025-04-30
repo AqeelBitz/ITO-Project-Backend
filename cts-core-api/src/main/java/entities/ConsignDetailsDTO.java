@@ -1,14 +1,13 @@
-package org.acme.models;
-// import java.sql.*;
+package entities;
+import java.sql.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import java.time.LocalDate;
 
-public class ConsignDatails {
+public class ConsignDetailsDTO {
+    
     public Integer consignment_id;
     public String courier;
-
     @JsonFormat(pattern = "yyyy-MM-dd")
-    public LocalDate booking_date;
+    public Date booking_date;
     public String account_no;
     public String account_title;
     public String shipping_bill;
@@ -20,14 +19,14 @@ public class ConsignDatails {
     public String card_no;
     public String card_type;
     @JsonFormat(pattern = "yyyy-MM-dd")
-    public LocalDate card_creation_date;
+    public Date card_creation_date;
     public String return_reason;
     @JsonFormat(pattern = "yyyy-MM-dd")
-    public LocalDate return_date;
+    public Date return_date;
     public String branch_cd;
     public String receiver_name_b;
     @JsonFormat(pattern = "yyyy-MM-dd")
-    public LocalDate delivery_date;
+    public Date delivery_date;
     public String status;
     public String receiver_name_d;
     public String relationship;
@@ -41,6 +40,8 @@ public class ConsignDatails {
     public String getCustomer_cnic_number() {
         return customer_cnic_number;
     }
+
+    
 
     public Integer getConsignment_id() {
         return consignment_id;
@@ -58,11 +59,11 @@ public class ConsignDatails {
         this.courier = courier;
     }
 
-    public LocalDate getBooking_date() {
+    public Date getBooking_date() {
         return booking_date;
     }
 
-    public void setBooking_date(LocalDate booking_date) {
+    public void setBooking_date(Date booking_date) {
         this.booking_date = booking_date;
     }
 
@@ -146,11 +147,11 @@ public class ConsignDatails {
         this.card_type = card_type;
     }
 
-    public LocalDate getCard_creation_date() {
+    public Date getCard_creation_date() {
         return card_creation_date;
     }
 
-    public void setCard_creation_date(LocalDate card_creation_date) {
+    public void setCard_creation_date(Date card_creation_date) {
         this.card_creation_date = card_creation_date;
     }
 
@@ -162,11 +163,11 @@ public class ConsignDatails {
         this.return_reason = return_reason;
     }
 
-    public LocalDate getReturn_date() {
+    public Date getReturn_date() {
         return return_date;
     }
 
-    public void setReturn_date(LocalDate return_date) {
+    public void setReturn_date(Date return_date) {
         this.return_date = return_date;
     }
 
@@ -186,11 +187,11 @@ public class ConsignDatails {
         this.receiver_name_b = receiver_name_b;
     }
 
-    public LocalDate getDelivery_date() {
+    public Date getDelivery_date() {
         return delivery_date;
     }
 
-    public void setDelivery_date(LocalDate delivery_date) {
+    public void setDelivery_date(Date delivery_date) {
         this.delivery_date = delivery_date;
     }
 
@@ -245,5 +246,4 @@ public class ConsignDatails {
                 + delivery_date + ", status=" + status + ", receiver_name_d=" + receiver_name_d + ", relationship="
                 + relationship + ", receiver_cnic=" + receiver_cnic + ", card_status=" + card_status + "]";
     }
-    
 }
