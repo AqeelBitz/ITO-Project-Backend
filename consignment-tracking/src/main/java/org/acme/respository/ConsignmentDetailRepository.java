@@ -115,7 +115,7 @@ public class ConsignmentDetailRepository {
                                     e);
                         }
                     } else {
-                        String message = "if-Cannot accept consignment with ID " + consignDetails.getConsignment_id() + ": Invalid initial status '" + consignDetails.getStatus() + "' for a new record.";
+                        String message = "Cannot accept consignment with ID " + consignDetails.getConsignment_id() + ": Invalid initial status '" + consignDetails.getStatus() + "' for a new record.";
                         System.out.println(message);
                         throw new ConsignDatailsException(message, null);
                     }
