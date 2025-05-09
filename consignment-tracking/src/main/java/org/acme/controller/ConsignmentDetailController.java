@@ -4,28 +4,23 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.sql.DataSource;
-
 import java.sql.Connection;
 import org.acme.exceptions.ConsignDatailsException;
 import org.acme.exceptions.LogginFileDetailsException;
-
-// import java.sql.SQLException;
-
+// import java.sql.SQLException
 import org.acme.models.ConsignDatails;
 import org.acme.respository.ConsignmentDetailRepository;
 import org.acme.services.ConsignmentDetailService;
-
 import jakarta.inject.Inject;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import java.text.SimpleDateFormat;
+import java.sql.Date;
+import jakarta.ws.rs.*;
+import org.acme.respository.BirtService;
+import org.eclipse.birt.core.exception.BirtException;
+
 
 @Path("api/data-access/consignment-details")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -39,6 +34,9 @@ public class ConsignmentDetailController {
 
     @Inject 
     DataSource dataSource;
+
+    @Inject
+    BirtService birtService;
     @POST
     @Path("/accept")
     public Response AddConsginmentDetails(@QueryParam("fileName") String file_name, 
@@ -107,7 +105,7 @@ public class ConsignmentDetailController {
             @QueryParam("address") String address,
             @QueryParam("city") String city,
             @QueryParam("account_no") String accountNo,
-            @QueryParam("receiver_cnic") String receiver_cnic
+            @QueryParam("customer_cnic_number") String customer_cnic_number
             ) {
 
         Map<String, String> searchCriteria = new HashMap<>();
@@ -125,8 +123,8 @@ public class ConsignmentDetailController {
             searchCriteria.put("account_no", accountNo);
         }
 
-        if (receiver_cnic != null){
-            searchCriteria.put("receiver_cnic", receiver_cnic);
+        if (customer_cnic_number != null){
+            searchCriteria.put("customer_cnic_number", customer_cnic_number);
         }
         try {
             List<ConsignDatails> results = consignmentDetailService.searchConsignmentDetails(searchCriteria);
@@ -139,6 +137,35 @@ public class ConsignmentDetailController {
                     .build();
         }
     }
-
+    @GET
+    @Path("/generate")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response generateReport(
+        @QueryParam("design") @DefaultValue("your-report.rptdesign") String designFile,
+                                   @QueryParam("format") @DefaultValue("pdf") String format,
+                                   @QueryParam("username") String username,
+                                   @QueryParam("fromDate") Date fromDate,
+                                   @QueryParam("toDate") Date toDate
+                                   ) {
+        try {
+            // System.out.println("Username received in controller:" + username);
+            Map<String, Object> params = new HashMap<>();
+            params.put("username", username);
+            if (fromDate != null) {
+                params.put("fromDate", new java.sql.Date(fromDate.getTime()));
+                
+            }
+            if (toDate!= null) {
+                params.put("toDate", new java.sql.Date(toDate.getTime()));
+                
+            }
+            // System.out.println("Params map:" + params);
+       byte[] bytes= birtService.generateReport(designFile, format, params);
+       return  Response.ok(bytes).header("Content-Disposition","inline; filename=birtfile.pdf").header("Content-Type","application/pdf").build();
+        } catch (BirtException e) {
+            e.printStackTrace();
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
 
 }

@@ -42,7 +42,7 @@ public interface ConsignmentClient {
             @QueryParam("address") String address,
             @QueryParam("city") String city,
             @QueryParam("account_no") String accountNo,
-            @QueryParam("receiver_cnic") String receiver_cnic
+            @QueryParam("customer_cnic_number") String customer_cnic_number
     );
 
     @GET

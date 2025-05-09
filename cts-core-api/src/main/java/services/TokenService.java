@@ -31,10 +31,10 @@ public class TokenService {
             jwtClaims.setJwtId(UUID.randomUUID().toString());
             jwtClaims.setSubject(subject);
             jwtClaims.setClaim(Claims.upn.name(), subject);
-            jwtClaims.setClaim(Claims.preferred_username.name(), name); //add more
+            jwtClaims.setClaim(Claims.preferred_username.name(), name); 
             jwtClaims.setClaim(Claims.groups.name(), Arrays.asList(roles));
             jwtClaims.setAudience("using-jwt");
-            jwtClaims.setExpirationTimeMinutesInTheFuture(60); // TODO specify how long do you need
+            jwtClaims.setExpirationTimeMinutesInTheFuture(60); 
 
 
             String token = TokenUtils.generateTokenString(jwtClaims);

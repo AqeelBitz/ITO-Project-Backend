@@ -86,8 +86,8 @@ public class ConsignmentResource {
                                       @QueryParam("address") String address,
                                       @QueryParam("city") String city,
                                       @QueryParam("account_no") String accountNo,
-                                      @QueryParam("receiver_cnic") String receiverCnic) {
-        Response clientResponse = consignmentClient.searchConsignmentDetails(consignmentId, address, city, accountNo, receiverCnic);
+                                      @QueryParam("customer_cnic_number") String customerCnic) {
+        Response clientResponse = consignmentClient.searchConsignmentDetails(consignmentId, address, city, accountNo, customerCnic);
         if (clientResponse.getStatus() == Response.Status.OK.getStatusCode()) {
             List<ConsignDetailsDTO> responsePayload = clientResponse.readEntity(List.class);
             System.out.println("Response Payload (No Results?): " + responsePayload); // Add this line
