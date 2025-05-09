@@ -67,10 +67,16 @@ public class ConsignmentResource {
     @Path("/reject")
     @RolesAllowed(Roles.UPDATER)
     public Response rejectConsignment(@QueryParam("fileName") String fileName,
-                                       @QueryParam("userId") int userId,
-                                       @QueryParam("recordCount") int  recordCount
+    @QueryParam("userId") int userId,
+    @QueryParam("recordCount") int recordCount,
+    @QueryParam("accept_record_count") int accept_record_count,
+    @QueryParam("reject_record_count") int reject_record_count,
+    @QueryParam("rejectedRows") String rejectedRows,
+    @QueryParam("acceptedRows") String acceptedRows,
+    @QueryParam("uploadedBy") String uploadedBy,
+    @QueryParam("fileType") String fileType
                                        ) {
-        Response clientResponse = consignmentClient.addRejectedCount(fileName, userId,recordCount);
+        Response clientResponse = consignmentClient.addRejectedCount(fileName, userId, recordCount,accept_record_count, reject_record_count,rejectedRows,acceptedRows,uploadedBy,fileType);
         if (clientResponse.getStatus() == Response.Status.CREATED.getStatusCode()) {
             return ResponseUtil.buildSuccessResponse(null, "Consignment rejected successfully!"); // No data to return typically
         } else {

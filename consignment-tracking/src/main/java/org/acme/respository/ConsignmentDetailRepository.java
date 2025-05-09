@@ -302,28 +302,6 @@ public class ConsignmentDetailRepository {
                 "VALUES (?, ?, CURRENT DATE, CURRENT TIME, ?, ?, ?, ?, ?, ?, ?)";
 
         try {
-            // int newAcceptedCount = 1;
-            // int newRejectedCount = 0;
-            // int lastRejectedCount = 0;
-            // int lastAcceptedCount = 0;
-            // String _rejectedRows ="";
-            // String _acceptedRows ="";
-
-            // try (PreparedStatement selectStmt = connection.prepareStatement(selectSql)) {
-            //     selectStmt.setString(1, filename);
-            //     selectStmt.setInt(2, userId);
-
-            //     ResultSet rs = selectStmt.executeQuery();
-            //     if (rs.next()) {
-            //          lastAcceptedCount = rs.getInt("accept_record_count");
-            //          lastRejectedCount = rs.getInt("reject_record_count");
-            //          _rejectedRows = rs.getString("rejectedRows");
-            //          _acceptedRows = rs.getString("acceptedRows");
-            //         // newAcceptedCount = lastAcceptedCount + 1;
-            //         // newRejectedCount = lastRejectedCount;
-            //     }
-            // }
-
             try (PreparedStatement insertStmt = connection.prepareStatement(insertSql)) {
                 insertStmt.setInt(1, userId);
                 insertStmt.setString(2, filename);
@@ -343,48 +321,37 @@ public class ConsignmentDetailRepository {
         }
     }
 
-    public void incrementRejectedCount(String filename, int userId, int record_count)
+    public void incrementRejectedCount(String filename, int userId, int record_count, int accept_record_count, int reject_record_count,String rejectedRows,String acceptedRows,String uploadedBy,String fileType)
             throws LogginFileDetailsException {
+                System.out.println("record_count="+record_count+","+"accept_record_count="+ accept_record_count+","+"reject_record_count="+ reject_record_count+","+"rejectedRows="+ rejectedRows+","+ "acceptedRows="+acceptedRows);
+
         String selectSql = "SELECT record_count,accept_record_count, reject_record_count FROM Logging_File_Details " +
                 "WHERE file_name = ? AND user_id = ? " +
-                "ORDER BY file_date DESC, file_time DESC LIMIT 1"; // Get latest entry
+                "ORDER BY file_date DESC, file_time DESC LIMIT 1"; 
+
 
         String insertSql = "INSERT INTO Logging_File_Details " +
-                "( user_id, file_name, file_date, file_time, record_count, accept_record_count, reject_record_count) " +
-                "VALUES ( ?, ?, CURRENT DATE, CURRENT TIME, ?, ?, ?)";
+                "(user_id, file_name, file_date, file_time, record_count, accept_record_count, reject_record_count, rejectedRows, acceptedRows, uploadedBy, fileType) " +
+                "VALUES (?, ?, CURRENT DATE, CURRENT TIME, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(false); // Start transaction
-
-            int newAcceptedCount = 0;
-            int newRejectedCount = 1;
-
-            // Fetch latest counts
-            try (PreparedStatement selectStmt = connection.prepareStatement(selectSql)) {
-                selectStmt.setString(1, filename);
-                selectStmt.setInt(2, userId);
-
-                ResultSet rs = selectStmt.executeQuery();
-                if (rs.next()) {
-                    int lastRejectedCount = rs.getInt("reject_record_count");
-                    int lastAcceptCount = rs.getInt("accept_record_count");
-                    newAcceptedCount = lastAcceptCount;
-                    newRejectedCount = lastRejectedCount + 1;
-                }
-            }
 
             // Insert new entry with updated counts
             try (PreparedStatement insertStmt = connection.prepareStatement(insertSql)) {
                 insertStmt.setInt(1, userId);
                 insertStmt.setString(2, filename);
                 insertStmt.setInt(3, record_count);
-                insertStmt.setInt(4, newAcceptedCount);
-                insertStmt.setInt(5, newRejectedCount);
-
+                insertStmt.setInt(4, accept_record_count);
+                insertStmt.setInt(5, reject_record_count);
+                insertStmt.setString(6, rejectedRows);
+                insertStmt.setString(7, acceptedRows);
+                insertStmt.setString(8, uploadedBy);
+                insertStmt.setString(9, fileType);
                 insertStmt.executeUpdate();
             }
 
-            connection.commit(); // Commit transaction
+            connection.commit();
         } catch (SQLException e) {
             System.out.println("===> " + e.toString());
             throw new LogginFileDetailsException("Error inserting accepted file log" + e.getMessage(), e);

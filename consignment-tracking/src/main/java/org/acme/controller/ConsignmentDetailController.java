@@ -89,9 +89,18 @@ public class ConsignmentDetailController {
     
     @POST
     @Path("/reject")
-    public Response addRejectedCount(@QueryParam("fileName") String fileName, @QueryParam("userId") int userId, @QueryParam("recordCount") int record_count) throws LogginFileDetailsException {
+    public Response addRejectedCount(@QueryParam("fileName") String file_name, 
+    @QueryParam("userId") int user_id, 
+    @QueryParam("recordCount") int record_count,
+    @QueryParam("accept_record_count") int accept_record_count,
+    @QueryParam("reject_record_count") int reject_record_count,
+    @QueryParam("rejectedRows") String rejectedRows,
+    @QueryParam("acceptedRows") String acceptedRows,
+    @QueryParam("uploadedBy") String uploadedBy,
+    @QueryParam("fileType") String fileType
+    ) throws LogginFileDetailsException {
         try {
-            consignmentDetailsRepository.incrementRejectedCount(fileName, userId, record_count);
+            consignmentDetailsRepository.incrementRejectedCount(file_name, user_id,record_count,accept_record_count, reject_record_count,rejectedRows, acceptedRows, uploadedBy,fileType);
             return Response.status(Response.Status.CREATED).build();
         } catch (LogginFileDetailsException e) {
             // System.err.println("Error Adding Rejected Count: " + e.getMessage());

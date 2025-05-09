@@ -33,7 +33,17 @@ public interface ConsignmentClient {
 
     @POST
     @Path("/consignment-details/reject")
-    Response addRejectedCount(@QueryParam("fileName") String fileName, @QueryParam("userId") int userId, @QueryParam("recordCount") int recordCount);
+    Response addRejectedCount(
+        @QueryParam("fileName") String fileName,
+        @QueryParam("userId") int userId,
+        @QueryParam("recordCount") int recordCount,
+        @QueryParam("accept_record_count") int accept_record_count,
+        @QueryParam("reject_record_count") int reject_record_count,
+        @QueryParam("rejectedRows") String rejectedRows,
+        @QueryParam("acceptedRows") String acceptedRows,
+        @QueryParam("uploadedBy") String uploadedBy,
+        @QueryParam("fileType") String fileType
+        );
 
     @GET
     @Path("/consignment-details/search")
