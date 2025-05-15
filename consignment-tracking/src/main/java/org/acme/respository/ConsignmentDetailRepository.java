@@ -362,6 +362,7 @@ public class ConsignmentDetailRepository {
             throws ConsignDatailsException {
         List<ConsignDatails> results = new ArrayList<>();
         StringBuilder sql = new StringBuilder("SELECT * FROM Consignment_Details WHERE ");
+        System.out.println("sql 1 :" + sql);
         List<String> conditions = new ArrayList<>();
 
         try (Connection connection = dataSource.getConnection()) {
@@ -371,7 +372,7 @@ public class ConsignmentDetailRepository {
                 String value = entry.getValue();
 
                 if (isValidColumnName(columnName)) {
-                    conditions.add(columnName + " = ?");
+                    conditions.add("UPPER("+columnName+") like UPPER('%"+value+"%')");
                 } else {
                     throw new ConsignDatailsException("Invalid column name: " + columnName, null);
                 }
@@ -382,12 +383,17 @@ public class ConsignmentDetailRepository {
             }
 
             sql.append(String.join(" AND ", conditions));
+            System.out.println("sql 2 :" + sql);
             PreparedStatement preparedStatement = connection.prepareStatement(sql.toString());
 
-            int parameterIndex = 1;
-            for (String value : searchCriteria.values()) {
-                preparedStatement.setString(parameterIndex++, value);
-            }
+            // int parameterIndex = 1;
+            // for (String value : searchCriteria.values()) {
+            //     preparedStatement.setString(parameterIndex++, "'%"+value+"%'");
+            //     System.out.println("PS : " +preparedStatement.toString());
+            //     System.out.println("'%"+value+"%'");
+            // }
+
+           
 
             ResultSet resultSet = preparedStatement.executeQuery();
 

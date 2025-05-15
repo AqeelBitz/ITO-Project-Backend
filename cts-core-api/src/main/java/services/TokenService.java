@@ -16,13 +16,6 @@ public class TokenService {
 
     public final static Logger LOGGER = Logger.getLogger(TokenService.class.getSimpleName());
 
-    // public String generateUserToken(String email, String username) {
-    //     return generateToken(email, username, Roles.UPDATER);
-    // }
-
-    // public String generateServiceToken(String serviceId, String serviceName) {
-    //     return generateToken(serviceId,serviceName,Roles.VIEWER);
-    // }
 
     public String generateToken(String subject, String name, String... roles) {
         try {
@@ -34,7 +27,7 @@ public class TokenService {
             jwtClaims.setClaim(Claims.preferred_username.name(), name); 
             jwtClaims.setClaim(Claims.groups.name(), Arrays.asList(roles));
             jwtClaims.setAudience("using-jwt");
-            jwtClaims.setExpirationTimeMinutesInTheFuture(60); 
+            jwtClaims.setExpirationTimeMinutesInTheFuture(20); 
 
 
             String token = TokenUtils.generateTokenString(jwtClaims);
