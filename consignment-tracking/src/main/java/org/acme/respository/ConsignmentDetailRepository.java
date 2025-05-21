@@ -45,13 +45,17 @@ public class ConsignmentDetailRepository {
             public List<ConsignDatails> addConsignmentDetails(List<ConsignDatails> consignmentDetailsList,
             Connection connection) throws ConsignDatailsException {
         List<ConsignDatails> processedDetails = new ArrayList<>();
-
+        int count=0;
         try {
-            for (ConsignDatails consignDetails : consignmentDetailsList) {
+
+            for (ConsignDatails consignDetails : consignmentDetailsList) 
+            {
                 Integer consignmentId = null;
+                count = count+1;
                 String status = null;
                 String selectQuery = "SELECT consignment_id, status FROM Consignment_Details WHERE consignment_id = ?";
                 System.out.println("consignDetails.getConsignment_id(): " + consignDetails.getConsignment_id());
+                System.out.println("consignDetails--> : " + consignDetails);
                 try (PreparedStatement selectStatement = connection.prepareStatement(selectQuery)) {
                     selectStatement.setObject(1,
                             consignDetails.getConsignment_id() != null ? consignDetails.getConsignment_id() : null);
@@ -248,8 +252,6 @@ public class ConsignmentDetailRepository {
                             }
                         } else {
                              System.out.println("No fields to update for consignment ID: " + consignmentId);
-                             // Optionally add the original object to processedDetails if no update was needed but processed
-                             // processedDetails.add(consignDetails);
                          }
 
                     }
@@ -278,11 +280,13 @@ public class ConsignmentDetailRepository {
                     else {
                         String message = "Can not update consignment with ID " + consignDetails.getConsignment_id() + ": Invalid status transition from '" + status + "' to '" + consignDetails.getStatus() + "'.";
                         System.out.println(message);
+                        System.out.println("count-->: "+count);
                         throw new ConsignDatailsException(message, null);
                     }
                 }
                 System.err.println("Processed consignDatails: " + consignDetails);
             }
+            System.out.println("count-->: "+count);
             return processedDetails;
 
         } catch (SQLException e) {
@@ -363,6 +367,7 @@ public class ConsignmentDetailRepository {
         List<ConsignDatails> results = new ArrayList<>();
         StringBuilder sql = new StringBuilder("SELECT * FROM Consignment_Details WHERE ");
         System.out.println("sql 1 :" + sql);
+        System.out.println("searchCriteria -->:" + searchCriteria);
         List<String> conditions = new ArrayList<>();
 
         try (Connection connection = dataSource.getConnection()) {

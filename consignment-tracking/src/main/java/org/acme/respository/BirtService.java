@@ -22,7 +22,6 @@ public class BirtService {
     public void init() {}
 
     public  byte[]  generateReport(String designFileName, String format, Map<String, Object> params) throws BirtException {
-        // System.out.println("Inside BirtService: generating report with params:"+ params);
         EngineConfig engineConfig = new EngineConfig();
         engineConfig.setEngineHome("");
         Platform.startup(engineConfig);

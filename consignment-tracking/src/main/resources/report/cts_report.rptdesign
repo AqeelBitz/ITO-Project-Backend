@@ -17,6 +17,7 @@
     </list-property>
     <property name="units">in</property>
     <property name="iconFile">/templates/blank_report.gif</property>
+    <property name="layoutPreference">fixed layout</property>
     <property name="bidiLayoutOrientation">ltr</property>
     <property name="imageDPI">96</property>
     <parameters>
@@ -685,6 +686,28 @@ from LOGGING_FILE_DETAILS where FILE_DATE between ? and ? ]]></xml-property>
             <property name="borderTopStyle">solid</property>
             <property name="borderTopWidth">thin</property>
         </style>
+        <style name="NewStyle4" id="249">
+            <property name="paddingTop">10px</property>
+            <property name="paddingBottom">10px</property>
+        </style>
+        <style name="NewStyle3" id="270">
+            <property name="verticalAlign">middle</property>
+        </style>
+        <style name="NewStyle5" id="271">
+            <property name="verticalAlign">middle</property>
+        </style>
+        <style name="NewStyle6" id="272">
+            <property name="verticalAlign">middle</property>
+        </style>
+        <style name="NewStyle7" id="273">
+            <property name="verticalAlign">middle</property>
+        </style>
+        <style name="NewStyle8" id="274">
+            <property name="verticalAlign">middle</property>
+        </style>
+        <style name="NewStyle9" id="275">
+            <property name="verticalAlign">middle</property>
+        </style>
     </styles>
     <page-setup>
         <simple-master-page name="Simple MasterPage" id="2">
@@ -736,6 +759,7 @@ Bank Al Habib Limited]]></text-property>
 FILE UPLOADING HISTORY]]></text-property>
                             </text>
                             <text-data id="247">
+                                <property name="fontSize">9pt</property>
                                 <property name="textAlign">center</property>
                                 <expression name="valueExpr">"From: "+reportContext.getParameterValue("fromDate")+" To: "+reportContext.getParameterValue("toDate")</expression>
                                 <property name="contentType">html</property>
@@ -825,7 +849,8 @@ FILE UPLOADING HISTORY]]></text-property>
     </page-setup>
     <body>
         <table id="170">
-            <property name="textAlign">center</property>
+            <property name="color">black</property>
+            <property name="textAlign">left</property>
             <property name="width">7.979166666666667in</property>
             <property name="dataSet">Data Set</property>
             <list-property name="boundDataColumns">
@@ -891,38 +916,38 @@ FILE UPLOADING HISTORY]]></text-property>
                 </structure>
             </list-property>
             <column id="224">
-                <property name="width">0.9375in</property>
+                <property name="width">0.8333333333333334in</property>
             </column>
             <column id="225">
-                <property name="width">0.7708333333333334in</property>
-            </column>
-            <column id="226">
-                <property name="width">1.46875in</property>
-            </column>
-            <column id="227">
-                <property name="width">1.1041666666666667in</property>
-            </column>
-            <column id="228">
-                <property name="width">0.6666666666666666in</property>
-            </column>
-            <column id="229">
-                <property name="width">0.71875in</property>
-            </column>
-            <column id="230">
-                <property name="width">0.6770833333333334in</property>
-            </column>
-            <column id="232">
                 <property name="width">0.78125in</property>
             </column>
+            <column id="226">
+                <property name="width">1.4583333333333333in</property>
+            </column>
+            <column id="227">
+                <property name="width">1.1145833333333333in</property>
+            </column>
+            <column id="228">
+                <property name="width">0.625in</property>
+            </column>
+            <column id="229">
+                <property name="width">0.6354166666666666in</property>
+            </column>
+            <column id="230">
+                <property name="width">0.6354166666666666in</property>
+            </column>
+            <column id="232">
+                <property name="width">0.96875in</property>
+            </column>
             <column id="233">
-                <property name="width">0.8541666666666666in</property>
+                <property name="width">0.9270833333333334in</property>
             </column>
             <header>
                 <row id="171">
                     <property name="style">NewStyle2</property>
                     <property name="fontSize">9pt</property>
                     <property name="fontWeight">bold</property>
-                    <property name="height">0.5in</property>
+                    <property name="height">0.59375in</property>
                     <cell id="172">
                         <label id="181">
                             <text-property name="text">DATE</text-property>
@@ -972,54 +997,89 @@ FILE UPLOADING HISTORY]]></text-property>
             </header>
             <detail>
                 <row id="192">
-                    <property name="style">NewStyle1</property>
+                    <property name="style">NewStyle9</property>
                     <property name="fontSize">9pt</property>
                     <property name="borderBottomStyle">none</property>
                     <property name="borderLeftStyle">none</property>
                     <property name="borderRightStyle">none</property>
                     <property name="borderTopStyle">none</property>
-                    <property name="height">0.40625in</property>
+                    <property name="lineHeight">1.2em</property>
                     <cell id="193">
                         <data id="202">
+                            <property name="style">NewStyle3</property>
+                            <property name="paddingTop">10px</property>
+                            <property name="paddingBottom">10px</property>
                             <property name="resultSetColumn">FILE_DATE</property>
                         </data>
                     </cell>
                     <cell id="195">
+                        <property name="style">NewStyle5</property>
+                        <property name="paddingTop">10px</property>
+                        <property name="paddingBottom">10px</property>
                         <data id="204">
                             <property name="resultSetColumn">FILE_TIME</property>
                         </data>
                     </cell>
                     <cell id="197">
+                        <property name="style">NewStyle6</property>
+                        <property name="paddingTop">10px</property>
+                        <property name="paddingBottom">10px</property>
                         <data id="194">
                             <property name="resultSetColumn">FILE_NAME</property>
                         </data>
                     </cell>
                     <cell id="199">
                         <data id="212">
+                            <property name="style">NewStyle7</property>
+                            <property name="paddingTop">10px</property>
+                            <property name="paddingBottom">10px</property>
                             <property name="resultSetColumn">FILETYPE</property>
                         </data>
                     </cell>
                     <cell id="201">
+                        <property name="style">NewStyle8</property>
+                        <property name="paddingTop">10px</property>
+                        <property name="paddingBottom">10px</property>
                         <data id="196">
                             <property name="resultSetColumn">RECORD_COUNT</property>
                         </data>
                     </cell>
                     <cell id="203">
+                        <property name="paddingTop">10px</property>
+                        <property name="paddingBottom">10px</property>
                         <data id="198">
+                            <structure name="stringFormat">
+                                <property name="category">Unformatted</property>
+                            </structure>
+                            <property name="display">block</property>
                             <property name="resultSetColumn">ACCEPT_RECORD_COUNT</property>
                         </data>
                     </cell>
                     <cell id="205">
+                        <property name="paddingTop">10px</property>
+                        <property name="paddingBottom">10px</property>
                         <data id="200">
+                            <property name="display">block</property>
                             <property name="resultSetColumn">REJECT_RECORD_COUNT</property>
                         </data>
                     </cell>
                     <cell id="209">
+                        <property name="paddingTop">10px</property>
+                        <property name="paddingBottom">10px</property>
                         <data id="206">
+                            <structure name="numberFormat">
+                                <property name="category">Custom</property>
+                            </structure>
+                            <structure name="stringFormat">
+                                <property name="category">Unformatted</property>
+                            </structure>
+                            <property name="display">block</property>
                             <property name="resultSetColumn">REJECTEDROWS</property>
                         </data>
                     </cell>
                     <cell id="211">
+                        <property name="paddingTop">10px</property>
+                        <property name="paddingBottom">10px</property>
                         <data id="210">
                             <property name="resultSetColumn">UPLOADEDBY</property>
                         </data>
