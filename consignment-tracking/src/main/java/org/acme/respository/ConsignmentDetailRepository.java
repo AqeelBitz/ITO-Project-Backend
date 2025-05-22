@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
 public class ConsignmentDetailRepository {
     @Inject
     DataSource dataSource;
-
     private static final List<String> ALL_COLUMNS = Arrays.asList(
             "consignment_id", "courier", "booking_date", "account_no", "account_title",
             "shipping_bill", "address", "city", "email", "mobile_no", "letter_type",
