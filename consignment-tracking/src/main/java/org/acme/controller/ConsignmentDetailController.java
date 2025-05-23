@@ -148,7 +148,7 @@ public class ConsignmentDetailController {
     }
     @GET
     @Path("/generate")
-    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    @Produces(MediaType.TEXT_PLAIN)
     public Response generateReport(
         @QueryParam("design") @DefaultValue("your-report.rptdesign") String designFile,
                                    @QueryParam("format") @DefaultValue("pdf") String format,
@@ -170,7 +170,9 @@ public class ConsignmentDetailController {
             }
             // System.out.println("Params map:" + params);
        byte[] bytes= birtService.generateReport(designFile, format, params);
-       return  Response.ok(bytes).header("Content-Disposition","inline; filename=birtfile.pdf").header("Content-Type","application/pdf").build();
+       return  Response.ok(bytes).
+       header("Content-Disposition","inline; filename=birtfile.pdf").
+       header("Content-Type","application/pdf").build();
         } catch (BirtException e) {
             e.printStackTrace();
             return Response.status(Response.Status.BAD_REQUEST).build();

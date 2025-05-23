@@ -15,12 +15,13 @@ import entities.Roles;
 
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
 @Path("/consignments")
 @Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
+//@Produces(MediaType.APPLICATION_JSON)
 public class ConsignmentResource {
 
     @Inject
@@ -121,6 +122,41 @@ public class ConsignmentResource {
             return ResponseUtil.buildErrorResponse(Response.Status.fromStatusCode(clientResponse.getStatus()), errorMessage);
         }
     }
+    
+        @GET
+    @Path("/generate")
+//        @Produces(MediaType.TEXT_PLAIN) // <--- CHANGE THIS LINE
+         @RolesAllowed({Roles.UPDATER, Roles.VIEWER})
+    public Response generateReport(
+        @QueryParam("design") @DefaultValue("your-report.rptdesign") String designFile,
+                                   @QueryParam("format") @DefaultValue("pdf") String format,
+                                   @QueryParam("username") String username,
+                                   @QueryParam("fromDate") Date fromDate,
+                                   @QueryParam("toDate") Date toDate
+                                   ){
+
+        try{
+            byte[] clientResponse = consignmentClient.generateReport(designFile, format, username,fromDate, toDate);
+            System.out.println("clientResponse--> "+clientResponse.toString());
+
+            return  Response.ok(clientResponse).
+                    header("Content-Disposition","inline; filename=birtfile.pdf").
+                    header("Content-Type","application/pdf").build();
+        }catch( Exception e){
+            System.out.println("This is ===>"+e.toString());
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e).build();
+
+        }
+
+//
+
+//                                    if (clientResponse.getStatus() == Response.Status.CREATED.getStatusCode()) {
+//                                        return ResponseUtil.buildSuccessResponse(null, "Report generated successfully!"); // No data to return typically
+//                                    } else {
+//                                        return ResponseUtil.buildErrorResponse(Response.Status.fromStatusCode(clientResponse.getStatus()),
+//                                                "Failed to generate report."); // You might want to read the error body if the data access service provides more details
+//                                    }
+                                   }
     @GET
     @Path("/lov")
     @RolesAllowed({Roles.UPDATER, Roles.VIEWER})
