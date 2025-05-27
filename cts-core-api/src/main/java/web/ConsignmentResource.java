@@ -21,7 +21,6 @@ import java.util.Map;
 
 @Path("/consignments")
 @Consumes(MediaType.APPLICATION_JSON)
-//@Produces(MediaType.APPLICATION_JSON)
 public class ConsignmentResource {
 
     @Inject
@@ -148,14 +147,6 @@ public class ConsignmentResource {
 
         }
 
-//
-
-//                                    if (clientResponse.getStatus() == Response.Status.CREATED.getStatusCode()) {
-//                                        return ResponseUtil.buildSuccessResponse(null, "Report generated successfully!"); // No data to return typically
-//                                    } else {
-//                                        return ResponseUtil.buildErrorResponse(Response.Status.fromStatusCode(clientResponse.getStatus()),
-//                                                "Failed to generate report."); // You might want to read the error body if the data access service provides more details
-//                                    }
                                    }
     @GET
     @Path("/lov")
