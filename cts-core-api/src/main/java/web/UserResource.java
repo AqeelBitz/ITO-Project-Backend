@@ -39,7 +39,7 @@ public class UserResource {
     public Response login(UserLoginRequest request) {
         try {
             System.out.println("=================> logged in");
-            UserLoginResponseDTO userLoginResponseDTO = userDao.loginUser(request.username, request.password, request.branchCd);
+            UserLoginResponseDTO userLoginResponseDTO = userDao.loginUser(request.username.toLowerCase(), request.password.toLowerCase(), request.branchCd);
             if (userLoginResponseDTO != null && userLoginResponseDTO.getToken()!=null) {
                 return Response.ok(userLoginResponseDTO).build();
             } else {
