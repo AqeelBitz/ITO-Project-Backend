@@ -74,7 +74,7 @@ public class ConsignmentDetailRepository {
 
                 if (consignmentId == null && status == null) {
                     // --- Insertion Logic (remains largely the same) ---
-                    if ("In Transit".equals(consignDetails.getStatus())) {
+                    if ("in transit".equals(consignDetails.getStatus())) {
                         List<Object> params = new ArrayList<>();
 
                         params.add(consignDetails.getConsignment_id() != null ? consignDetails.getConsignment_id() : null);
@@ -97,10 +97,10 @@ public class ConsignmentDetailRepository {
                         params.add(consignDetails.getReceiver_name_b() != null ? consignDetails.getReceiver_name_b(): null);
                         params.add(consignDetails.getReceiver_name_d() != null ? consignDetails.getReceiver_name_d(): null);
                         params.add(consignDetails.getDelivery_date() != null ? consignDetails.getDelivery_date() : null);
-                        params.add(consignDetails.getStatus() != null ? consignDetails.getStatus() : null);
+                        params.add(consignDetails.getStatus() != null ? consignDetails.getStatus().toLowerCase() : null);
                         params.add(consignDetails.getRelationship() != null ? consignDetails.getRelationship() : null);
                         params.add(consignDetails.getReceiver_cnic() != null ? consignDetails.getReceiver_cnic() : null);
-                        params.add(consignDetails.getCard_status() != null ? consignDetails.getCard_status() : null);
+                        params.add(consignDetails.getCard_status() != null ? consignDetails.getCard_status().toLowerCase() : null);
                         params.add(consignDetails.getCustomer_cnic_number() != null ? consignDetails.getCustomer_cnic_number(): null);
 
 
@@ -125,8 +125,8 @@ public class ConsignmentDetailRepository {
 
                 } else {
                     // --- Dynamic Update Logic ---
-                    if ("Delivered".equals(consignDetails.getStatus()) && "In Transit".equals(status)
-                            || "Returned".equals(consignDetails.getStatus()) && "In Transit".equals(status)) {
+                    if ("delivered".equals(consignDetails.getStatus().toLowerCase()) && "in transit".equals(status.toLowerCase())
+                            || "returned".equals(consignDetails.getStatus().toLowerCase()) && "in transit".equals(status.toLowerCase())) {
 
                         List<String> setClauses = new ArrayList<>();
                         List<Object> params = new ArrayList<>();
@@ -211,7 +211,7 @@ public class ConsignmentDetailRepository {
                          // Always include status if the update condition is met, as it's the trigger
                          if (consignDetails.getStatus() != null) {
                              setClauses.add("status = ?");
-                             params.add(consignDetails.getStatus());
+                             params.add(consignDetails.getStatus().toLowerCase());
                          }
                          if (consignDetails.getRelationship() != null) {
                              setClauses.add("relationship = ?");
@@ -223,7 +223,7 @@ public class ConsignmentDetailRepository {
                          }
                          if (consignDetails.getCard_status() != null) {
                              setClauses.add("card_status = ?");
-                             params.add(consignDetails.getCard_status());
+                             params.add(consignDetails.getCard_status().toLowerCase());
                          }
                          if (consignDetails.getCustomer_cnic_number() != null) {
                              setClauses.add("customer_cnic_number = ?");
@@ -254,24 +254,24 @@ public class ConsignmentDetailRepository {
                          }
 
                     }
-                    else if ("Delivered".equals(consignDetails.getStatus()) && "Delivered".equals(status)) {
+                    else if ("delivered".equals(consignDetails.getStatus().toLowerCase()) && "delivered".equals(status.toLowerCase())) {
                         String message = "Already Delivered consignment with ID " + consignDetails.getConsignment_id() + ".";
                         System.out.println(message);
                         throw new ConsignDatailsException(message, null);
-                    } else if ("Returned".equals(consignDetails.getStatus()) && "Returned".equals(status)) {
+                    } else if ("returned".equals(consignDetails.getStatus().toLowerCase()) && "returned".equals(status.toLowerCase())) {
                         String message = "Already Returned consignment with ID " + consignDetails.getConsignment_id() + ".";
                         System.out.println(message);
                         throw new ConsignDatailsException(message, null);
-                    } else if ("Returned".equals(consignDetails.getStatus()) && "Delivered".equals(status)) {
+                    } else if ("returned".equals(consignDetails.getStatus().toLowerCase()) && "delivered".equals(status.toLowerCase())) {
                         String message = "Can not Return, already Delivered consignment with ID " + consignDetails.getConsignment_id() + ".";
                         System.out.println(message);
                         throw new ConsignDatailsException(message, null);
-                    } else if ("Delivered".equals(consignDetails.getStatus()) && "Returned".equals(status)) {
+                    } else if ("delivered".equals(consignDetails.getStatus().toLowerCase()) && "returned".equals(status.toLowerCase())) {
                          String message = "Can not Deliver, already Returned consignment with ID " + consignDetails.getConsignment_id() + ".";
                          System.out.println(message);
                          throw new ConsignDatailsException(message, null);
                      }
-                     else if ("In Transit".equals(consignDetails.getStatus()) && "In Transit".equals(status)) {
+                     else if ("in transit".equals(consignDetails.getStatus().toLowerCase()) && "in transit".equals(status.toLowerCase())) {
                           String message = "Already Shipped consignment with ID " + consignDetails.getConsignment_id() + ".";
                           System.out.println(message);
                           throw new ConsignDatailsException(message, null);
@@ -436,7 +436,7 @@ public class ConsignmentDetailRepository {
                         resultSet.getString("receiver_name_b") != null ? resultSet.getString("receiver_name_b") : null);
                 consignDatails.setReceiver_name_d(
                         resultSet.getString("receiver_name_d") != null ? resultSet.getString("receiver_name_d") : null);
-                consignDatails.setStatus(resultSet.getString("status") != null ? resultSet.getString("status") : null);
+                consignDatails.setStatus(resultSet.getString("status") != null ? resultSet.getString("status").toLowerCase() : null);
                 consignDatails.setRelationship(
                         resultSet.getString("relationship") != null ? resultSet.getString("relationship") : null);
                 consignDatails.setReceiver_cnic(
