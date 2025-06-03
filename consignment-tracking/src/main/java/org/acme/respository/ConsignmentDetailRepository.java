@@ -33,7 +33,7 @@ public class ConsignmentDetailRepository {
             "shipping_bill", "address", "city", "email", "mobile_no", "letter_type",
             "card_no", "card_type", "card_creation_date", "return_reason", "return_date",
             "branch_cd", "receiver_name_b", "receiver_name_d", "delivery_date", "status",
-            "relationship", "receiver_cnic", "card_status", "customer_cnic_number");
+            "relationship", "receiver_cnic", "card_status", "customer_cnic_number", "return_date_courier");
 
     private static final String INSERT_SQL_TEMPLATE = "INSERT INTO Consignment_Details ("
             + String.join(", ", ALL_COLUMNS) + ") VALUES ("
@@ -62,7 +62,7 @@ public class ConsignmentDetailRepository {
                     try (ResultSet rs = selectStatement.executeQuery()) {
                         if (rs.next()) {
                             consignmentId = rs.getInt("consignment_id");
-                            status = rs.getString("status");
+                            status = rs.getString("status").toLowerCase();
                             System.out.println("Existing consignmentId and status: " + consignmentId + ", " + status);
                         } else {
                             System.out.println("Consignment ID not found. Proceeding with insertion.");
@@ -74,7 +74,7 @@ public class ConsignmentDetailRepository {
 
                 if (consignmentId == null && status == null) {
                     // --- Insertion Logic (remains largely the same) ---
-                    if ("in transit".equals(consignDetails.getStatus())) {
+                    if ("in transit".equals(consignDetails.getStatus().toLowerCase() )) {
                         List<Object> params = new ArrayList<>();
 
                         params.add(consignDetails.getConsignment_id() != null ? consignDetails.getConsignment_id() : null);
@@ -102,6 +102,7 @@ public class ConsignmentDetailRepository {
                         params.add(consignDetails.getReceiver_cnic() != null ? consignDetails.getReceiver_cnic() : null);
                         params.add(consignDetails.getCard_status() != null ? consignDetails.getCard_status().toLowerCase() : null);
                         params.add(consignDetails.getCustomer_cnic_number() != null ? consignDetails.getCustomer_cnic_number(): null);
+                        params.add(consignDetails.getReturn_date_courier() != null ? consignDetails.getReturn_date_courier(): null);
 
 
                         try (PreparedStatement insertStatement = connection.prepareStatement(INSERT_SQL_TEMPLATE)) {
@@ -229,6 +230,10 @@ public class ConsignmentDetailRepository {
                              setClauses.add("customer_cnic_number = ?");
                              params.add(consignDetails.getCustomer_cnic_number());
                          }
+                         if (consignDetails.getReturn_date_courier() != null) {
+                            setClauses.add("return_date_courier = ?");
+                            params.add(consignDetails.getReturn_date_courier());
+                        }
 
 
                         // Only proceed with update if there are fields to update
@@ -446,7 +451,9 @@ public class ConsignmentDetailRepository {
                 consignDatails.setCustomer_cnic_number(resultSet.getString("customer_cnic_number") != null
                         ? resultSet.getString("customer_cnic_number")
                         : null);
-
+                        consignDatails.setReturn_date_courier(resultSet.getString("return_date_courier") != null
+                        ? resultSet.getString("return_date_courier")
+                        : null);
                 // Add null checks for LocalDate fields using getObject and ternary operator
                 consignDatails.setBooking_date(
                         resultSet.getObject("booking_date") != null
@@ -485,7 +492,7 @@ public class ConsignmentDetailRepository {
                 "shipping_bill", "address", "city", "email", "mobile_no", "letter_type",
                 "card_no", "card_type", "card_creation_date", "return_reason", "return_date",
                 "branch_cd", "receiver_name_b", "receiver_name_d", "delivery_date", "status",
-                "relationship", "receiver_cnic", "card_status", "customer_cnic_number"
+                "relationship", "receiver_cnic", "card_status", "customer_cnic_number", "return_date_courier"
         };
 
         for (String validColumn : validColumns) {

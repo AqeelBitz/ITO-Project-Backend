@@ -83,7 +83,7 @@
                 </ex-property>
             </list-property>
             <property name="odaDriverClass">com.ibm.db2.jcc.DB2Driver</property>
-            <property name="odaURL">jdbc:db2://10.51.41.13:50000/test_db</property>
+            <property name="odaURL">jdbc:db2://localhost:50000/test_db</property>
             <property name="odaUser">bahl</property>
             <encrypted-property name="odaPassword" encryptionID="base64">YkBobEAxMjM0</encrypted-property>
         </oda-data-source>
@@ -735,7 +735,7 @@ from LOGGING_FILE_DETAILS where FILE_DATE between ? and ? ]]></xml-property>
                                 <property name="height">0.8020833333333334in</property>
                                 <property name="width">0.6770833333333334in</property>
                                 <property name="source">file</property>
-                                <expression name="uri" type="constant">/home/bahl/Desktop/Training project/ITO/CTS/be/consignment-tracking/src/main/resources/images/download.png</expression>
+                                <expression name="uri" type="constant">/home/bahl/Desktop/CTS/be/consignment-tracking/src/main/resources/images/download.png</expression>
                             </image>
                         </cell>
                         <cell id="61">

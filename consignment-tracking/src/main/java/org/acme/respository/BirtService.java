@@ -27,7 +27,7 @@ public class BirtService {
         Platform.startup(engineConfig);
         IReportEngineFactory factory = (IReportEngineFactory) Platform.createFactoryObject(IReportEngineFactory.EXTENSION_REPORT_ENGINE_FACTORY);
         IReportEngine engine = factory.createReportEngine(engineConfig);
-        IReportRunnable report = engine.openReportDesign("/home/bahl/Desktop/Training project/ITO/CTS/be/consignment-tracking/src/main/resources/report/cts_report.rptdesign");
+        IReportRunnable report = engine.openReportDesign("/home/bahl/Desktop/CTS/be/consignment-tracking/src/main/resources/report/cts_report.rptdesign");
         IRunAndRenderTask task = engine.createRunAndRenderTask(report);
         if (params != null) {
             task.setParameterValues(params);

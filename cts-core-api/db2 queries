@@ -88,7 +88,8 @@ status varchar(30),
 relationship varchar(50),
 receiver_cnic varchar(50),
 card_status varchar(30),
-customer_cnic_number varchar(50)
+customer_cnic_number varchar(50),
+return_date_courier varchar(50)
 )
 
 --DROP TABLE CONSIGNMENT_DETAILS ;

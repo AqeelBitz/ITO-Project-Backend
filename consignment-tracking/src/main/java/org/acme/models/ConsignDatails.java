@@ -34,12 +34,21 @@ public class ConsignDatails {
     public String receiver_cnic;
     public String card_status;
     public String customer_cnic_number;
+    public String return_date_courier;
+
     public void setCustomer_cnic_number(String customer_cnic_number) {
         this.customer_cnic_number = customer_cnic_number;
     }
 
     public String getCustomer_cnic_number() {
         return customer_cnic_number;
+    }
+    public void setReturn_date_courier(String return_date_courier) {
+        this.return_date_courier = return_date_courier;
+    }
+
+    public String getReturn_date_courier() {
+        return return_date_courier;
     }
 
     public Integer getConsignment_id() {
